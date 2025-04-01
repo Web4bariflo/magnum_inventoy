@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Web4bariflo/magnum_inventoy/static/css/main.117df52e.css",
+    "main.js": "/Web4bariflo/magnum_inventoy/static/js/main.09f5a5a6.js",
+    "static/js/453.00fb5b0c.chunk.js": "/Web4bariflo/magnum_inventoy/static/js/453.00fb5b0c.chunk.js",
+    "index.html": "/Web4bariflo/magnum_inventoy/index.html",
+    "main.117df52e.css.map": "/Web4bariflo/magnum_inventoy/static/css/main.117df52e.css.map",
+    "main.09f5a5a6.js.map": "/Web4bariflo/magnum_inventoy/static/js/main.09f5a5a6.js.map",
+    "453.00fb5b0c.chunk.js.map": "/Web4bariflo/magnum_inventoy/static/js/453.00fb5b0c.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.117df52e.css",
+    "static/js/main.09f5a5a6.js"
+  ]
+}
