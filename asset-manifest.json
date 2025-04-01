@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/magnum_inventoy/static/css/main.117df52e.css",
-    "main.js": "/magnum_inventoy/static/js/main.3f021a35.js",
+    "main.js": "/magnum_inventoy/static/js/main.69e9ef35.js",
     "static/js/453.00fb5b0c.chunk.js": "/magnum_inventoy/static/js/453.00fb5b0c.chunk.js",
     "index.html": "/magnum_inventoy/index.html",
     "main.117df52e.css.map": "/magnum_inventoy/static/css/main.117df52e.css.map",
-    "main.3f021a35.js.map": "/magnum_inventoy/static/js/main.3f021a35.js.map",
+    "main.69e9ef35.js.map": "/magnum_inventoy/static/js/main.69e9ef35.js.map",
     "453.00fb5b0c.chunk.js.map": "/magnum_inventoy/static/js/453.00fb5b0c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.117df52e.css",
-    "static/js/main.3f021a35.js"
+    "static/js/main.69e9ef35.js"
   ]
 }
