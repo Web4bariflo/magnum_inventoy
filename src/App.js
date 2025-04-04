@@ -30,6 +30,7 @@ import DistStockout from "./pages/distributorside/page/DistStockout";
 import DistStockTransaction from "./pages/distributorside/page/DistStockTransaction"
 import StockForm from "./pages/distributorside/StockForm"
 import AddFarmer from "./pages/distributorside/AddFarmer";
+import Dashboard from "../src/components/Dashboard/Dashboard"
 
 function App() {
   const { status, error, items } = useSelector((state) => state.sidebardata);
@@ -50,7 +51,7 @@ function App() {
       element: <Layout sidebarList={items} />,
       errorElement: <Layout sidebarList={items} childPage={<Error404Page />} />,
       children: [
-        { path: "/", element: <Home /> },
+        { path: "/", element: <Dashboard /> },
         { path: "/home", element: <ProtectedRoute element={<Home />} /> },
         {
           path: "/form/:formName/:id?",

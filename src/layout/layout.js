@@ -78,7 +78,7 @@ import {
   redLightTheme,
   redDarkTheme,
 } from "./themes";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo1.png";
 import { GlobalStyles } from "./GlobalStyle";
 import TextField from "@mui/material/TextField";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -265,7 +265,7 @@ const Layout = ({ sidebarList, pageTitle, childPage }) => {
           src={logo}
           alt="Logo"
           className="logo"
-          style={{ marginLeft: "25px" }}
+          style={{ marginLeft: "25px", height:"120px", width: "200px" }}
         />
       </Box>
       <List

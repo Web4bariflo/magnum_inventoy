@@ -35,7 +35,7 @@ import useApi from "../hooks/APIHandler";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/reducer/IsLoggedInReducer";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo1.png";
 
 const Auth = () => {
   const [tab, setTab] = useState(0);
@@ -163,12 +163,12 @@ const Auth = () => {
                 <img
                   src={logo}
                   alt="Logo"
-                  style={{ borderRadius: "50%", width: "100px" }}
+                  style={{ borderRadius: "50%", width: "150px" }}
                 />
               </Box>
-              <Typography variant="h5" align="center" gutterBottom>
+              {/* <Typography variant="h5" align="center" gutterBottom>
                 Bariflo
-              </Typography>
+              </Typography> */}
               <Tabs value={tab} onChange={handleChange} centered>
                 <Tab label="Sign Up" />
                 <Tab label="Sign In" />

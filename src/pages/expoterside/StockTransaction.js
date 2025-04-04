@@ -7,18 +7,24 @@ import {
   Button,
   Breadcrumbs,
   Divider,
+  Dialog,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import useApi from "../../hooks/APIHandler";
 import { DataGrid } from "@mui/x-data-grid";
+import RotateRightIcon from "@mui/icons-material/RotateRight";
+import Calender from "../../components/Calender";
 
 
 const StockTransaction = () => {
   const [status, setStatus] = useState([]);
   const [selectedstatus, setSelectedstatus] = useState("");
   const [selected, setSelected] = useState(null); // Store the selected status
+  const [open, setOpen] = useState(false);
 
   const { error, loading, callApi } = useApi();
 
@@ -38,8 +44,15 @@ const StockTransaction = () => {
 
     fetchTransactions();
   }, []);
+  const handleToggle = () => {
+    setOpen(!open); // Toggle the 'open' state
+  };
 
-  // Define different columns for STOCKIN and STOCKOUT
+  const handleApiResponse = (data) => {
+    console.log("Received response from CalendarComponent:", data);
+    setStatus(data.data);
+  };
+
   const stockOutColumns = [
     { field: "serial_no", headerName: "serial_no", width: 100 },
     { field: "Address", headerName: "Address", width: 200 },
@@ -57,14 +70,14 @@ const StockTransaction = () => {
 
   // Map bags to rows for DataGrid
   const rows = selectedstatus
-    ? selectedstatus.bags.map((bag,index) => ({
+    ? selectedstatus.bags.map((bag, index) => ({
         id: bag.id,
         serial_no: index + 1,
         Manufacture_name: bag.Manufacture_name,
         Address: bag.Address,
         Email: bag.Email,
         Manufacture_date: bag.Manufacture_date,
-        distributor_name:  bag.distributor_name, // Add the distributor_name to the row
+        distributor_name: bag.distributor_name, // Add the distributor_name to the row
         Stock_In_Time:
           selectedstatus.Order_status === "STOCKIN"
             ? new Date(selectedstatus.created_at).toLocaleString("en-IN", {
@@ -89,62 +102,85 @@ const StockTransaction = () => {
         p={3}
         mt={2}
       >
-        <Box width={{ xs: "100%", md: "30%" }} height="100px"  p={2}>
-          <Button
-            variant="contained"
-            startIcon={<CalendarMonthIcon />}
-            sx={{ marginBottom: 2 }}
-          >
-            Date Range
-          </Button>
-          {status.map((status, index) => (
-            <Box
-              key={index}
-              sx={{
-                mb: 2,
-                cursor: "pointer",
-                borderBottom: "1px solid #ddd",
-                padding: 2,
-                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                "&:hover": {
-                  backgroundColor: "#f5f5f5", 
-                  boxShadow: "0px 8px 12px rgba(0, 0, 0, 0.15)", 
-                  borderBottom: "1px solid #ccc",
-              },
-            }}
-              onClick={() => setSelectedstatus(status)}
+        <Box width={{ xs: "100%", md: "30%" }} height="100px" p={2}>
+          <Box display="flex" alignItems="center">
+            <Button
+              variant="contained"
+              startIcon={<CalendarMonthIcon />}
+              sx={{ marginBottom: 2 }}
+              // onClick={handleToggle}
             >
+              Date Range
+            </Button>
+            <RotateRightIcon sx={{ ml: 2, fontSize: 30 }} />{" "}
+            {/* Add margin to the left of the icon */}
+          </Box>
+          <Dialog
+            open={open}
+            onClose={handleToggle} // This will close the dialog when clicking outside
+          >
+            <DialogContent>
+              <Calender
+                apiEndpoint="auth/transbydate_expo/"
+                onResponse={handleApiResponse}
+              />
+            </DialogContent>
+          </Dialog>
+          {Array.isArray(status) && status.length === 0 ? (
+            <Typography variant="body1" color="textSecondary">
+              No transactions available.
+            </Typography>
+          ) : (
+            Array.isArray(status) &&
+            status.map((status, index) => (
               <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-around"
+                key={index}
+                sx={{
+                  mb: 2,
+                  cursor: "pointer",
+                  borderBottom: "1px solid #ddd",
+                  padding: 2,
+                  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                  "&:hover": {
+                    backgroundColor: "#f5f5f5",
+                    boxShadow: "0px 8px 12px rgba(0, 0, 0, 0.15)",
+                    borderBottom: "1px solid #ccc",
+                  },
+                }}
+                onClick={() => setSelectedstatus(status)}
               >
-                <Box display="flex" alignItems="center">
-                  {status.Stock_status === "STOCKIN" ? (
-                    <ArrowDownwardIcon
-                      color="success"
-                      style={{ fontSize: 30 }}
-                    />
-                  ) : (
-                    <ArrowUpwardIcon color="error" style={{ fontSize: 30 }} />
-                  )}
-                  <Typography variant="h6" ml={1}>
-                    {status.Stock_status}
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-around"
+                >
+                  <Box display="flex" alignItems="center">
+                    {status.Order_status === "STOCKIN" ? (
+                      <ArrowDownwardIcon
+                        color="success"
+                        style={{ fontSize: 30 }}
+                      />
+                    ) : (
+                      <ArrowUpwardIcon color="error" style={{ fontSize: 30 }} />
+                    )}
+                    <Typography variant="h6" ml={1}>
+                      {status.Order_status}
+                    </Typography>
+                  </Box>
+
+                  {/* Date on the right side */}
+                  <Typography variant="body2" color="textSecondary">
+                    {new Date(status.created_at).toLocaleString("en-IN", {
+                      hour12: true,
+                    })}
                   </Typography>
                 </Box>
-
-                {/* Date on the right side */}
-                <Typography variant="body2" color="textSecondary">
-                  {new Date(status.date_time).toLocaleString("en-IN", {
-                    hour12: true,
-                  })}
+                <Typography variant="body1" marginLeft={5}>
+                  {status.num_bags} bags
                 </Typography>
               </Box>
-              <Typography variant="body1" marginLeft={5}>
-                {status.total_bags} bags
-              </Typography>
-            </Box>
-          ))}
+            ))
+          )}
         </Box>
 
         {/* Divider between the two boxes */}
@@ -184,7 +220,7 @@ const StockTransaction = () => {
                     px={2}
                   >
                     {selectedstatus.bags[selectedstatus.bags.length - 1].id}
-                    </Typography>
+                  </Typography>
                 </Typography>
               </Typography>
 
