@@ -42,16 +42,11 @@ const StatesCard = () => {
   ];
 
   return (
-    <Box sx={{ padding: { xs: 2, md: 2 } }}>
-      <Typography
-        variant="h5"
-        mb={4}
-        px={{ xs: 0, md: 5 }}
-        sx={{ color: "#3B82F6", fontWeight: "bold" }}
-      >
+    <Box>
+      <Typography sx={{ fontWeight: "bold", fontSize: "18px", marginBottom: "5px" }}>
         Welcome to Dashboard.. !
       </Typography>
-      <Grid container spacing={5} px={{ xs: 0, md: 5 }}>
+      <Grid container spacing={2} >
         {[...staticData, ...dynamicData].map((item, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
             <Card
@@ -62,7 +57,6 @@ const StatesCard = () => {
                 padding: 1, // Reduced padding to make the card smaller
                 borderRadius: 2,
                 boxShadow: 2, // Reduced shadow for a more compact appearance
-                backgroundColor: "white",
                 position: "relative",
                 height: "auto", // Allow card to shrink based on content size
               }}
@@ -123,7 +117,7 @@ const StatesCard = () => {
                 </Box>
                 <Box
                   sx={{
-                    backgroundColor: "#0C5AEBD6",
+                    backgroundColor: "#0C5AEBD",
                     padding: 0.5,
                     borderRadius: 2,
                     position: "absolute",

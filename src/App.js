@@ -31,13 +31,16 @@ import DistStockTransaction from "./pages/distributorside/page/DistStockTransact
 import StockForm from "./pages/distributorside/StockForm"
 import AddFarmer from "./pages/distributorside/AddFarmer";
 import Dashboard from "../src/components/Dashboard/Dashboard"
+import Farmer from "./pages/farmer/Farmer";
+import Barcode from "./pages/expoterside/GenerateBarcode"
 
 function App() {
   const { status, error, items } = useSelector((state) => state.sidebardata);
   // const { isLoggedIn } = useSelector((state) => state.isLoggedInReducer);
   const dispatch = useDispatch();
   // console.log(items)
-  
+  const role = localStorage.getItem("role");
+
   useEffect(() => {
     if ( status === "idle") {
       dispatch(fetchSidebar());
@@ -48,7 +51,7 @@ function App() {
     { path: "/auth", element: <Auth /> },
     {
       path: "/",
-      element: <Layout sidebarList={items} />,
+      element: <Layout sidebarList={items} pageTitle={`Welcome ${role} !`}/>,
       errorElement: <Layout sidebarList={items} childPage={<Error404Page />} />,
       children: [
         { path: "/", element: <Dashboard /> },
@@ -125,6 +128,14 @@ function App() {
           path: "/addfarmer",
           element: <ProtectedRoute element={<AddFarmer/>} />,
         }, 
+        {
+          path: "/farmer",
+          element: <ProtectedRoute element={<Farmer/>} />,
+        },
+        {
+          path: "/barcode",
+          element: <ProtectedRoute element={<Barcode/>} />,
+        },
       ],
     },
   ]);

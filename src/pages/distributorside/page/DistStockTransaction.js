@@ -68,7 +68,7 @@ const StockTransaction = () => {
 
   const stockInColumns = [
     { field: "serial_no", headerName: "serial_no", width: 100 },
-    { field: "Manufacture_name", headerName: "Manufacture_name", width: 200 },
+    { field: "Manufacture_name", headerName: "Manufacture_name", width: 220 },
     { field: "Feed_name", headerName: "Feed_name", width: 150 },
     { field: "Feed_weight", headerName: "Feed_weight", width: 150 },
     { field: "Unique_id", headerName: "Unique_id", width: 150 },
@@ -112,8 +112,8 @@ const StockTransaction = () => {
         flexDirection={{ xs: "column", md: "row" }}
         gap={2}
         minHeight="100vh"
-        p={3}
-        mt={2}
+        // p={3}
+        // mt={2}
       >
         <Box width={{ xs: "100%", md: "30%" }} height="100px" p={2}>
           <Box display="flex" alignItems="center">
@@ -205,7 +205,7 @@ const StockTransaction = () => {
 
         {/* Details Section */}
         {selectedstatus ? (
-          <Box width={{ xs: "100%", md: "70%" }} p={3} mt={{ xs: 2, md: 0 }}>
+          <Box width={{ xs: "100%", md: "70%" }}  >
             <Typography variant="h5" fontWeight="bold">
               {selectedstatus.Order_status}
             </Typography>
@@ -268,9 +268,9 @@ const StockTransaction = () => {
 
             <Typography
               variant="h5"
-              mt={5}
               color="primary"
               sx={{ cursor: "pointer" }}
+              mb={3}
             >
               {selectedstatus.num_bags} Bags
             </Typography>
@@ -285,8 +285,16 @@ const StockTransaction = () => {
               autoHeight={false}
               sx={{
                 height: 500, // Set height for the grid
-                border: "1px solid #e0e0e0", // Add a subtle border
-                boxShadow: 2, // Add a slight shadow around the grid for emphasis
+                boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)', // Apply shadow to the top
+                '& .MuiDataGrid-columnHeaders': {
+                  backgroundColor: '#cbb8ff  !important',
+                  color: 'black', // Set the text color for the header
+                  fontSize: '16px', // Set the font size for the header text
+                  fontWeight: 'bold', // Optionally, make the header text bold
+                },
+                '& .MuiDataGrid-columnHeaderTitle': {
+                  fontSize: '17px', // Adjust font size specifically for the column header text
+                },
               }}
               rowsPerPageOptions={[5]}
               disableSelectionOnClick

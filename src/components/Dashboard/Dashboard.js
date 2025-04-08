@@ -6,14 +6,11 @@ import ManageDistributor from "./ManageDistributor";
 
 const Dashboard = () => {
   return (
-    <Container
-      maxWidth="auto"
-      className="mt-5"
-    >
+    <>
       <StatsCards />
-      <GraphsDashboard/>
+      <GraphsDashboard />
       <ManageDistributor />
-    </Container>
+    </>
   );
 };
 

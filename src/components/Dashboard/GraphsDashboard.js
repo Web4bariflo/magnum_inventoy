@@ -70,11 +70,9 @@ const GraphsDashboard = () => {
   return (
     <Box
       display="flex"
-      // p={{ xs: 2 }}
       gap={2}
-      px={{ xs: 0, md: 7 }}
-      mt={4}
-      mb={4}
+      mt={2}
+      mb={2}
       sx={{
         flexDirection: { xs: "column", md: "row" },
         alignItems: "center",
@@ -83,13 +81,13 @@ const GraphsDashboard = () => {
       {/* Total Cost Card */}
       <StyledCard
         sx={{
-          width: { xs: "100%", md: 250 },
+          width: { xs: "100%", md: 350 },
           height: 340,
           textAlign: "center",
           position: "relative",
         }}
       >
-        <Typography variant="h6" sx={{ fontWeight: "bold", color: "#2563EB" }}>
+        <Typography variant="h6" sx={{ fontWeight: "bold"}} color="primary">
           Total Cost
         </Typography>
         <Box

@@ -701,6 +701,13 @@ export const customTheme = createTheme({
       },
     },
   },
+  MuiBox: {
+    styleOverrides: {
+      root: {
+        backgroundColor: 'rgba(128, 109, 255, 1)', // Set default background for Box component
+      },
+    },
+  },
   logo:{
     rectangle:'/logo_dark.png',
     square:'/logo_square_dark.png',

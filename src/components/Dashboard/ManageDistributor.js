@@ -1,6 +1,8 @@
 import axios from "axios";
 import React from "react";
 import { useState, useEffect } from "react";
+import useApi from "../../hooks/APIHandler";
+import { toast } from "react-toastify";
 import { Edit, Delete, Add } from "@mui/icons-material";
 import {
   Box,
@@ -26,18 +28,50 @@ import {
 // const apiUrl = import.meta.env.VITE_API_URL;
 
 const ManageDistributor = () => {
+  const { error, loading, callApi } = useApi();
+  const [manufacturers, setManufacturers] = useState([]);
+  const [distributors, setDistributors] = useState([]);
+
+  const fetchManufacturers = async () => {
+    try {
+      const response = await callApi({
+        url: `auth/bagcount/`,
+      });
+      console.log("bags", response);
+      if (response && response.status === 200) {
+        setManufacturers(response.data);
+      } else {
+        toast.error("Error fetching manufacturers");
+      }
+    } catch (error) {
+      console.error("API error:", error);
+      alert("Error: Something went wrong");
+    }
+  };
+
+
+  const getdistributor = async () => {
+    try {
+      const response = await callApi({ url: `auth/getdistributor/` });
+      setDistributors(response.data.results || response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchManufacturers();
+    getdistributor();
+  }, []);
 
   return (
     <Box
-      p={2}
-      // mx={2}
       mt={0}
-      px={{ xs: 0, md: 7 }}
       display="flex"
       flexDirection={{ xs: "column", sm: "row" }}
       gap={3}
     >
-      {/* Distributor List Table */}
       <TableContainer
         component={Paper}
         elevation={3}
@@ -52,14 +86,14 @@ const ManageDistributor = () => {
         >
           <Typography
             variant="h6"
-            sx={{ fontWeight: "bold", color: "#2563EB" }}
+            sx={{ fontWeight: "bold"}}
+            color= "primary"
           >
             Distributor List
           </Typography>
           <Button
             variant="contained"
             sx={{
-              backgroundColor: "#2563EB",
               color: "white",
               borderRadius: "10px",
             }}
@@ -68,7 +102,71 @@ const ManageDistributor = () => {
             Add
           </Button>
         </Box>
-     
+        <Table>
+          <TableHead>
+            <TableRow>
+              {[
+                "Sl. No",
+                "Distributor Name",
+                "Email",
+                "Location",
+                "Mobile No",
+                "Exporter Name",
+                "Actions",
+              ].map((header, index) => (
+                <TableCell
+                  key={index}
+                  align="center"
+                  sx={{ fontWeight: "bold", marginBottom: "20px" }}
+                >
+                  {header}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {distributors.length > 0 ? (
+              distributors.map((row, index) => (
+                <TableRow key={row.id}>
+                  {[
+                    index + 1,
+                    row.Distributor_name,
+                    row.Email,
+                    row.Location,
+                    row.Mobile_no,
+                    row.expoter_name,
+                  ].map((cell, i) => (
+                    <TableCell key={i} align="center">
+                      {cell}
+                    </TableCell>
+                  ))}
+                  <TableCell align="center">
+                    <IconButton
+                      color="primary"
+                      size="small"
+                      // onClick={() => handleEdit(row)}
+                    >
+                      <Edit />
+                    </IconButton>
+                    <IconButton
+                      color="error"
+                      size="small"
+                      // onClick={() => handleDelete(row.id)}
+                    >
+                      <Delete />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7} align="center">
+                  No data available
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </TableContainer>
 
       {/* Manufacture List Card */}
@@ -76,15 +174,32 @@ const ManageDistributor = () => {
         <CardContent>
           <Typography
             variant="subtitle1"
-            sx={{ color: "#2563EB", fontWeight: "bold" }}
+            sx={{ fontWeight: "bold" }}
+            color= "primary"
           >
             Manufacture List
           </Typography>
-     
+          <Table>
+            <TableHead>
+              <TableRow>
+                {["Sl No.", "Name"].map((header, index) => (
+                  <TableCell key={index} sx={{ fontWeight: "bold" }}>
+                    {header}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {manufacturers.map((value, index) => (
+                <TableRow key={index}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{value.Manufacture_name}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
-
- 
     </Box>
   );
 };

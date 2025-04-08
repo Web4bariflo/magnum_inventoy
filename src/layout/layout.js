@@ -61,6 +61,7 @@ import SyncAltIcon from "@mui/icons-material/SyncAlt";
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import LayersIcon from "@mui/icons-material/Layers";
+import QrCode2Icon from '@mui/icons-material/QrCode2';
 import LayersOutlinedIcon from "@mui/icons-material/LayersOutlined";
 import { ThemeProvider as Emotion10ThemeProvider } from "@emotion/react";
 import "./style.scss";
@@ -242,6 +243,8 @@ const Layout = ({ sidebarList, pageTitle, childPage }) => {
         return <LayersIcon />;
       case "stockout":
         return <LayersOutlinedIcon/>;
+      case "barcode":
+          return <QrCode2Icon/>;
       case "home":
           return <HomeOutlinedIcon/>;
       default:
