@@ -38,7 +38,13 @@ import useApi from "../../hooks/APIHandler";
 import { toast } from "react-toastify";
 import { getUser } from "../../utils/Helper";
 import { useNavigate } from "react-router-dom";
+import InfoIcon from '@mui/icons-material/Info';
 import React from "react";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/reducer/IsLoggedInReducer";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 const DistributorForm = () => {
   const { error, loading, callApi } = useApi();
@@ -186,6 +192,8 @@ const ManageDistributor = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const [searchTerm, setSearchTerm] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const fetchStockData = async () => {
     try {
@@ -234,13 +242,19 @@ const ManageDistributor = () => {
       console.error("Error: Distributor ID is missing.");
       return;
     }
-
+  
+    // Show confirmation prompt before proceeding
+    const confirmDelete = window.confirm("Are you sure you want to delete this distributor?");
+    if (!confirmDelete) {
+      return; // User cancelled
+    }
+  
     try {
       const response = await callApi({
         url: `auth/deletedistributor/${id}/`,
         method: "DELETE",
       });
-      
+  
       if (response.status === 200 || response.status === 204) {
         console.log("Distributor deleted successfully.");
         fetchStockData(); // Refresh list after delete
@@ -251,7 +265,38 @@ const ManageDistributor = () => {
       console.error("Error deleting distributor:", error);
     }
   };
+  
+  const handleView = async (name) => {
+    if (!name) {
+      console.error("Error: Distributor  is missing.");
+      return;
+    }
 
+    try {
+      const response = await callApi({
+        url: `auth/dist_login/`,
+        method: "POST",
+        body: {
+          "distributor_name": name
+        },
+      });
+      console.log(response)
+        console.log(response);
+            if (response?.data?.access) {
+              localStorage.setItem("token", response.data.access);
+              localStorage.setItem("role", response.data.role); 
+              toast.success("Login Successfully");
+              dispatch(login());
+              navigate("/home");
+              window.location.reload();
+              console.log("response of login: ", response);
+            } else {
+              toast.error("Invalid Credentials");
+            }
+    } catch (error) {
+      console.error("Error deleting distributor:", error);
+    }
+  };
   const filteredData = stockData.filter((row) =>
     [
       String(row.expoter_name) || "",
@@ -331,117 +376,62 @@ const ManageDistributor = () => {
         </Button>
       </Box>
 
-      {/* Table */}
-      <TableContainer
-        component={Paper}
-        elevation={3}
-        sx={{ maxHeight: "300px" }}
-      >
-        <Table>
-          <TableHead>
-            <TableRow>
-              {[
-                "SL.No",
-                "Distributor Name",
-                "Email",
-                "Location",
-                "Mobile No",
-                "Exporter Name",
-                "Actions",
-              ].map((header, index) => (
-                <TableCell
-                  key={index}
-                  style={{
-                    fontWeight: "bold",
-                    textAlign: "center",
-                    backgroundColor: index % 2 === 0 ? "#42a5f5" : "#64b5f6",
-                    color: "white",
-                    border: "1px solid #ccc",
-                    padding: "8px",
-                  }}
-                >
+
+      <Table>
+        <TableHead>
+          <TableRow>
+            {["Sl No.", "DistributorName", "Email", "Location", "Mobile_no", "Exporter Name", "Action"].map(
+              (header, index) => (
+                <TableCell key={index} sx={{ fontWeight: "bold" }}>
                   {header}
                 </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {visibleRows.length > 0 ? (
-              visibleRows.map((row, index) => (
-                <TableRow key={row.id || index}>
-                  {[
-                    index + 1,
-                    row.Distributor_name,
-                    row.Email,
-                    row.Location,
-                    row.Mobile_no,
-                    row.expoter_name,
-                  ].map((cell, i) => (
-                    <TableCell
-                      key={i}
-                      align="center"
-                      style={{ border: "1px solid #ccc" }}
-                    >
-                      {cell}
-                    </TableCell>
-                  ))}
-
-                  {/* Edit & Delete Buttons */}
-
-                  <TableCell
-                    align="center"
-                    style={{ border: "1px solid #ccc" }}
-                  >
-                    <IconButton
-                      color="primary"
-                      size="small"
-                      onClick={() => handleEdit(row)}
-                      sx={{
-                        backgroundColor: "#e0f7fa",
-                        borderRadius: "8px",
-                        padding: "8px",
-                        "&:hover": {
-                          backgroundColor: "#b2ebf2",
-                        },
-                      }}
-                    >
-                      <Edit />
-                    </IconButton>
-
-                    <IconButton
-                      color="error"
-                      size="small"
-                      onClick={() => handleDelete(row.id)}
-                      sx={{
-                        backgroundColor: "#ffebee",
-                        borderRadius: "8px",
-                        padding: "8px",
-                        marginLeft: "8px",
-                        "&:hover": {
-                          backgroundColor: "#ffcdd2",
-                        },
-                      }}
-                    >
-                      <Delete />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={6}
-                  align="center"
-                  style={{ color: "gray", border: "1px solid #ccc" }}
-                >
-                  No data available
-                </TableCell>
-              </TableRow>
+              )
             )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {visibleRows.map((value, index) => (
+            <TableRow key={index}>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>{value.Distributor_name}</TableCell>
+              <TableCell>{value.Email}</TableCell>
+              <TableCell>{value.Mobile_no}</TableCell>
+              <TableCell>{value.Location}</TableCell>
+              <TableCell>{value.expoter_name}</TableCell>
+              <TableCell>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <IconButton
+                    onClick={() => handleView(value.Distributor_name)}
+                    sx={{
+                      "&:hover": { color: "primary.main" },
+                    }}
+                    >
+                    <InfoOutlinedIcon />
+                  </IconButton>
 
+                  <IconButton
+                    onClick={() => handleEdit(value)}
+                    sx={{
+                      "&:hover": { color: "warning.main" },
+                    }}
+                  >
+                    <EditIcon />
+                  </IconButton>
+
+                  <IconButton
+                    onClick={() => handleDelete(value.id)}
+                    sx={{
+                      "&:hover": { color: "error.main" },
+                    }}
+                    >
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
       <Dialog open={Boolean(editData)} onClose={handleClose}>
         <DialogTitle>Edit Distributor</DialogTitle>
         <DialogContent>

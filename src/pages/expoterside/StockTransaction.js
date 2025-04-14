@@ -19,7 +19,6 @@ import { DataGrid } from "@mui/x-data-grid";
 import RotateRightIcon from "@mui/icons-material/RotateRight";
 import Calender from "../../components/Calender";
 
-
 const StockTransaction = () => {
   const [status, setStatus] = useState([]);
   const [selectedstatus, setSelectedstatus] = useState("");
@@ -55,17 +54,33 @@ const StockTransaction = () => {
 
   const stockOutColumns = [
     { field: "serial_no", headerName: "serial_no", width: 100 },
-    { field: "Address", headerName: "Address", width: 200 },
+    { field: "Order_id", headerName: "Order_id", width: 150 },
+    { field: "Manufacture_name", headerName: "Manufacture_name", width: 200 },
     { field: "Email", headerName: "Email", width: 200 },
-    { field: "distributor_name", headerName: "Distributor Name", width: 150 },
+    { field: "Address", headerName: "Address", width: 150 },
+    { field: "Manufacture_date", headerName: "Manufacture_date", width: 150 },
+    { field: "distributor_name", headerName: "Distributor Name", width: 200 },
+    { field: "Feed_name", headerName: "Feed_name", width: 150 },
+    { field: "Feed_weight", headerName: "Feed_weight", width: 150 },
+    { field: "Expiring_date", headerName: "Expiring_date", width: 150 },
+    { field: "Unique_id", headerName: "Unique_id", width: 150 },
+    { field: "Amount_paid", headerName: "Amount_paid", width: 150 },
+    { field: "Payment_mode", headerName: "Payment_mode", width: 150 },
   ];
 
   const stockInColumns = [
     { field: "serial_no", headerName: "serial_no", width: 100 },
-    { field: "Address", headerName: "Address", width: 200 },
+    { field: "Order_id", headerName: "Order_id", width: 150 },
+    { field: "Manufacture_name", headerName: "Manufacture_name", width: 200 },
     { field: "Email", headerName: "Email", width: 200 },
-    { field: "Manufacture_date", headerName: "Manufacture Date", width: 150 },
-    { field: "Manufacture_name", headerName: "Manufacture_name", width: 150 },
+    { field: "Address", headerName: "Address", width: 150 },
+    { field: "Manufacture_date", headerName: "Manufacture_date", width: 150 },
+    { field: "Feed_name", headerName: "Feed_name", width: 150 },
+    { field: "Feed_weight", headerName: "Feed_weight", width: 150 },
+    { field: "Expiring_date", headerName: "Expiring_date", width: 150 },
+    { field: "Unique_id", headerName: "Unique_id", width: 150 },
+    { field: "Amount_paid", headerName: "Amount_paid", width: 150 },
+    { field: "Payment_mode", headerName: "Payment_mode", width: 150 },
   ];
 
   // Map bags to rows for DataGrid
@@ -76,10 +91,17 @@ const StockTransaction = () => {
         Manufacture_name: bag.Manufacture_name,
         Address: bag.Address,
         Email: bag.Email,
+        Order_id: bag.Order_id,
+        Unique_id: bag.Unique_id,
+        Feed_name: bag.Feed_name,
+        Feed_weight: bag.Feed_weight,
+        Expiring_date: bag.Expiring_date,
+        Amount_paid: bag.Amount_paid,
+        Payment_mode: bag.Payment_mode,
         Manufacture_date: bag.Manufacture_date,
         distributor_name: bag.distributor_name, // Add the distributor_name to the row
         Stock_In_Time:
-          selectedstatus.Order_status === "STOCKIN"
+          selectedstatus.Stock_status === "STOCKIN"
             ? new Date(selectedstatus.created_at).toLocaleString("en-IN", {
                 hour12: true,
               })
@@ -99,8 +121,6 @@ const StockTransaction = () => {
         flexDirection={{ xs: "column", md: "row" }}
         gap={2}
         minHeight="100vh"
-        p={3}
-        mt={2}
       >
         <Box width={{ xs: "100%", md: "30%" }} height="100px" p={2}>
           <Box display="flex" alignItems="center">
@@ -108,79 +128,93 @@ const StockTransaction = () => {
               variant="contained"
               startIcon={<CalendarMonthIcon />}
               sx={{ marginBottom: 2 }}
-              // onClick={handleToggle}
+              onClick={handleToggle}
             >
               Date Range
             </Button>
-            <RotateRightIcon sx={{ ml: 2, fontSize: 30 }} />{" "}
-            {/* Add margin to the left of the icon */}
+            <RotateRightIcon
+              sx={{ ml: 2, mb: 2, fontSize: 35 }}
+              color="primary"
+              onClick={() => window.location.reload()}
+            />
           </Box>
+
           <Dialog
             open={open}
             onClose={handleToggle} // This will close the dialog when clicking outside
           >
             <DialogContent>
               <Calender
-                apiEndpoint="auth/transbydate_expo/"
+                apiEndpoint="auth/transbydate_dist/"
                 onResponse={handleApiResponse}
               />
             </DialogContent>
           </Dialog>
-          {Array.isArray(status) && status.length === 0 ? (
-            <Typography variant="body1" color="textSecondary">
-              No transactions available.
-            </Typography>
-          ) : (
-            Array.isArray(status) &&
-            status.map((status, index) => (
-              <Box
-                key={index}
-                sx={{
-                  mb: 2,
-                  cursor: "pointer",
-                  borderBottom: "1px solid #ddd",
-                  padding: 2,
-                  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                  "&:hover": {
-                    backgroundColor: "#f5f5f5",
-                    boxShadow: "0px 8px 12px rgba(0, 0, 0, 0.15)",
-                    borderBottom: "1px solid #ccc",
-                  },
-                }}
-                onClick={() => setSelectedstatus(status)}
-              >
+          <Box
+            sx={{
+              height: "80vh",
+              overflowY: "auto",
+            }}
+          >
+            {Array.isArray(status) && status.length === 0 ? (
+              <Typography variant="body1" color="textSecondary">
+                No transactions available.
+              </Typography>
+            ) : (
+              Array.isArray(status) &&
+              status.map((status, index) => (
                 <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="space-around"
+                  key={index}
+                  sx={{
+                    mb: 2,
+                    cursor: "pointer",
+                    borderBottom: "1px solid #ddd",
+                    padding: 2,
+                    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                    "&:hover": {
+                      backgroundColor: "#f5f5f5",
+                      boxShadow: "0px 8px 12px rgba(0, 0, 0, 0.15)",
+                      borderBottom: "1px solid #ccc",
+                    },
+                  }}
+                  onClick={() => setSelectedstatus(status)}
                 >
-                  <Box display="flex" alignItems="center">
-                    {status.Order_status === "STOCKIN" ? (
-                      <ArrowDownwardIcon
-                        color="success"
-                        style={{ fontSize: 30 }}
-                      />
-                    ) : (
-                      <ArrowUpwardIcon color="error" style={{ fontSize: 30 }} />
-                    )}
-                    <Typography variant="h6" ml={1}>
-                      {status.Order_status}
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="space-around"
+                  >
+                    <Box display="flex" alignItems="center">
+                      {status.Stock_status === "STOCKIN" ? (
+                        <ArrowDownwardIcon
+                          color="success"
+                          style={{ fontSize: 30 }}
+                        />
+                      ) : (
+                        <ArrowUpwardIcon
+                          color="error"
+                          style={{ fontSize: 30 }}
+                        />
+                      )}
+                      <Typography variant="h6" ml={1}>
+                        {status.Stock_status}
+                      </Typography>
+                    </Box>
+
+                    {/* Date on the right side */}
+                    <Typography variant="body2" color="textSecondary">
+                      {new Date(status.date_time).toLocaleString("en-IN", {
+                        hour12: true,
+                      })}
                     </Typography>
                   </Box>
-
-                  {/* Date on the right side */}
-                  <Typography variant="body2" color="textSecondary">
-                    {new Date(status.created_at).toLocaleString("en-IN", {
-                      hour12: true,
-                    })}
+                  <Typography variant="body1" marginLeft={5}>
+                    {status.total_bags} bags
                   </Typography>
                 </Box>
-                <Typography variant="body1" marginLeft={5}>
-                  {status.num_bags} bags
-                </Typography>
-              </Box>
-            ))
-          )}
+              ))
+            )}
+          </Box>
         </Box>
 
         {/* Divider between the two boxes */}
@@ -188,7 +222,7 @@ const StockTransaction = () => {
 
         {/* Details Section */}
         {selectedstatus ? (
-          <Box width={{ xs: "100%", md: "70%" }} p={3} mt={{ xs: 2, md: 0 }}>
+          <Box width={{ xs: "100%", md: "70%" }}>
             <Typography variant="h5" fontWeight="bold">
               {selectedstatus.Stock_status}
             </Typography>
@@ -210,7 +244,7 @@ const StockTransaction = () => {
                     component="span"
                     px={2}
                   >
-                    {selectedstatus.bags[0].id}
+                    {selectedstatus.bags[0].id}{" "}
                   </Typography>
                   | End:{" "}
                   <Typography
@@ -219,7 +253,7 @@ const StockTransaction = () => {
                     component="span"
                     px={2}
                   >
-                    {selectedstatus.bags[selectedstatus.bags.length - 1].id}
+                   {selectedstatus.bags[selectedstatus.bags.length - 1].id}
                   </Typography>
                 </Typography>
               </Typography>
@@ -227,16 +261,16 @@ const StockTransaction = () => {
               {/* diatributor and manufacture name */}
               {selectedstatus.Stock_status === "STOCKIN" ? (
                 <Typography variant="body2" mt={1} fontWeight="bold">
-                  Manufacture Name
+                  Exporter Name
                   <Typography p={2} fontWeight="normal">
                     {selectedstatus.Manufacture_name}
                   </Typography>
                 </Typography>
               ) : (
                 <Typography variant="body2" mt={1} fontWeight="bold">
-                  Distributor Name
+                  Farmer Name
                   <Typography p={2} fontWeight="normal">
-                    {selectedstatus.distributor_name}
+                    {selectedstatus.Distributor_name}
                   </Typography>
                 </Typography>
               )}
@@ -244,16 +278,16 @@ const StockTransaction = () => {
               <Typography variant="body2" mt={1} fontWeight="bold">
                 Balance
                 <Typography p={2} fontWeight="normal">
-                  {selectedstatus.Amount_paid}
+                  {selectedstatus.bags[0].Amount_paid}
                 </Typography>
               </Typography>
             </Box>
 
             <Typography
               variant="h5"
-              mt={5}
               color="primary"
               sx={{ cursor: "pointer" }}
+              mb={3}
             >
               {selectedstatus.num_bags} Bags
             </Typography>
@@ -268,8 +302,16 @@ const StockTransaction = () => {
               autoHeight={false}
               sx={{
                 height: 500, // Set height for the grid
-                border: "1px solid #e0e0e0", // Add a subtle border
-                boxShadow: 2, // Add a slight shadow around the grid for emphasis
+                boxShadow: "0 -4px 12px rgba(0, 0, 0, 0.1)", // Apply shadow to the top
+                "& .MuiDataGrid-columnHeaders": {
+                  backgroundColor: "#cbb8ff  !important",
+                  color: "black", // Set the text color for the header
+                  fontSize: "16px", // Set the font size for the header text
+                  fontWeight: "bold", // Optionally, make the header text bold
+                },
+                "& .MuiDataGrid-columnHeaderTitle": {
+                  fontSize: "17px", // Adjust font size specifically for the column header text
+                },
               }}
               rowsPerPageOptions={[5]}
               disableSelectionOnClick

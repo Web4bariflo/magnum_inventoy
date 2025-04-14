@@ -39,11 +39,32 @@ import { toast } from "react-toastify";
 import { getUser } from "../../utils/Helper";
 import { useNavigate } from "react-router-dom";
 import React from "react";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/reducer/IsLoggedInReducer";
 
 const AddFarmer = () => {
   const { error, loading, callApi } = useApi();
   const methods = useForm();
   const navigate = useNavigate();
+  const [farmers, setFarmers] = useState([]);
+  const dispatch = useDispatch();
+
+  const getFarmer = async () => {
+    try {
+      const response = await callApi({ url: `auth/getfarmer/` });
+      setFarmers(response.data.results || response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    getFarmer();
+  }, []);
 
   const onSubmit = async (data) => {
     try {
@@ -71,6 +92,60 @@ const AddFarmer = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (!id) {
+      console.error("Error: Distributor ID is missing.");
+      return;
+    }
+    console.log("Delete Click")
+    // try {
+    //   const response = await callApi({
+    //     url: `auth/deletedistributor/${id}/`,
+    //     method: "DELETE",
+    //   });
+      
+    //   if (response.status === 200 || response.status === 204) {
+    //     console.log("Distributor deleted successfully.");
+    //     // fetchStockData(); // Refresh list after delete
+    //   } else {
+    //     console.error("Error deleting distributor:", response.data);
+    //   }
+    // } catch (error) {
+    //   console.error("Error deleting distributor:", error);
+    // }
+  };
+  const handleView = async (name) => {
+    if (!name) {
+      console.error("Error: Distributor  is missing.");
+      return;
+    }
+
+    try {
+      const response = await callApi({
+        url: `auth/farm_login/`,
+        method: "POST",
+        body: {
+          "farmer_name": name
+        },
+      });
+      console.log(response)
+        console.log(response);
+            if (response?.data?.access) {
+              localStorage.setItem("token", response.data.access);
+              localStorage.setItem("role", response.data.role); 
+              toast.success("Login Successfully");
+              dispatch(login());
+              navigate("/home");
+              window.location.reload();
+              console.log("response of login: ", response);
+            } else {
+              toast.error("Invalid Credentials");
+            }
+    } catch (error) {
+      console.error("Error deleting distributor:", error);
+    }
+  };
+
   return (
     <Box>
       <FormProvider {...methods}>
@@ -79,7 +154,7 @@ const AddFarmer = () => {
             New Distributor Registration
           </Typography>
           <Grid container spacing={2} mt={2} mb={2}>
-            <Grid item xs={12} lg={4}>
+            <Grid item xs={12}>
               <TextField
                 label="Farmer Name"
                 fullWidth
@@ -92,7 +167,7 @@ const AddFarmer = () => {
             </Grid>
 
             {/* Email */}
-            <Grid item xs={12} lg={4}>
+            <Grid item xs={12} lg={6}>
               <TextField
                 label="Email"
                 fullWidth
@@ -108,7 +183,7 @@ const AddFarmer = () => {
                 helperText={methods.formState.errors.email?.message}
               />
             </Grid>
-            <Grid item xs={12} lg={4}>
+            <Grid item xs={12} lg={6}>
               <TextField
                 label="Mobile_no"
                 fullWidth
@@ -120,7 +195,7 @@ const AddFarmer = () => {
                 helperText={methods.formState.errors.Mobile_no?.message}
               />
             </Grid>
-            <Grid item xs={12} lg={4}>
+            <Grid item xs={12} lg={6}>
               <TextField
                 label="Password"
                 fullWidth
@@ -133,7 +208,7 @@ const AddFarmer = () => {
               />
             </Grid>
             {/* Address */}
-            <Grid item xs={12} lg={4}>
+            <Grid item xs={12} lg={6}>
               <TextField
                 label="Location"
                 fullWidth
@@ -173,6 +248,62 @@ const AddFarmer = () => {
           </Box>
         </form>
       </FormProvider>
+      <Typography variant="h6" marginTop={4}>
+        List of Farmers
+      </Typography>
+      <Table>
+        <TableHead>
+          <TableRow>
+            {["Sl No.", "Name", "Email", "Mobile_no", "Location", "Action"].map(
+              (header, index) => (
+                <TableCell key={index} sx={{ fontWeight: "bold" }}>
+                  {header}
+                </TableCell>
+              )
+            )}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {farmers.map((value, index) => (
+            <TableRow key={index}>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>{value.Farmer_name}</TableCell>
+              <TableCell>{value.Email}</TableCell>
+              <TableCell>{value.Mobile_no}</TableCell>
+              <TableCell>{value.Location}</TableCell>
+              <TableCell>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <IconButton
+                    sx={{
+                      "&:hover": { color: "primary.main" },
+                    }}
+                    onClick={() => handleView(value.Farmer_name)}
+                    >
+                    <InfoOutlinedIcon />
+                  </IconButton>
+
+                  <IconButton
+                    sx={{
+                      "&:hover": { color: "warning.main" },
+                    }}
+                  >
+                    <EditIcon />
+                  </IconButton>
+
+                  <IconButton
+                    sx={{
+                      "&:hover": { color: "error.main" },
+                    }}
+                    onClick={() => handleDelete(value.id)} // make sure value.id exists
+                    >
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </Box>
   );
 };

@@ -33,6 +33,7 @@ import AddFarmer from "./pages/distributorside/AddFarmer";
 import Dashboard from "../src/components/Dashboard/Dashboard"
 import Farmer from "./pages/farmer/Farmer";
 import Barcode from "./pages/expoterside/GenerateBarcode"
+import ManageExporter from "./pages/exporter/ManageExporter";
 
 function App() {
   const { status, error, items } = useSelector((state) => state.sidebardata);
@@ -76,6 +77,10 @@ function App() {
           path: "/manage/users",
           element: <ProtectedRoute element={<ManageUsers />} />,
         },  
+        {
+          path: "/manage/expoters",
+          element: <ProtectedRoute element={<ManageExporter/>} />,
+        }, 
         {
           path: "/create/po",
           element: <ProtectedRoute element={<CreatePurchaseOrder />} />,
