@@ -43,7 +43,7 @@ const StatesCard = () => {
 
   return (
     <Box>
-      <Typography sx={{ fontWeight: "bold", fontSize: "18px", marginBottom: "5px" }}>
+      <Typography sx={{ fontWeight: "bold", fontSize: "18px", marginBottom: "5px" }} color="primary">
         Welcome to Dashboard.. !
       </Typography>
       <Grid container spacing={2} >

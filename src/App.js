@@ -52,7 +52,7 @@ function App() {
     { path: "/auth", element: <Auth /> },
     {
       path: "/",
-      element: <Layout sidebarList={items} pageTitle={`Welcome ${role} !`}/>,
+      element: <Layout sidebarList={items} pageTitle={`Hello ${role} !`}/>,
       errorElement: <Layout sidebarList={items} childPage={<Error404Page />} />,
       children: [
         { path: "/", element: <Dashboard /> },
