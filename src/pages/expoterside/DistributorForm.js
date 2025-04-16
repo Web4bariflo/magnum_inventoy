@@ -42,7 +42,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import React from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/reducer/IsLoggedInReducer";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -406,7 +406,7 @@ const ManageDistributor = () => {
                       "&:hover": { color: "primary.main" },
                     }}
                     >
-                    <InfoOutlinedIcon />
+                    <VisibilityOutlinedIcon />
                   </IconButton>
 
                   <IconButton

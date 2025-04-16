@@ -39,7 +39,7 @@ import { toast } from "react-toastify";
 import { getUser } from "../../utils/Helper";
 import { useNavigate } from "react-router-dom";
 import React from "react";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch } from "react-redux";
@@ -279,7 +279,7 @@ const AddFarmer = () => {
                     }}
                     onClick={() => handleView(value.Farmer_name)}
                     >
-                    <InfoOutlinedIcon />
+                    <VisibilityOutlinedIcon />
                   </IconButton>
 
                   <IconButton

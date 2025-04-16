@@ -34,6 +34,7 @@ import Dashboard from "../src/components/Dashboard/Dashboard"
 import Farmer from "./pages/farmer/Farmer";
 import Barcode from "./pages/expoterside/GenerateBarcode"
 import ManageExporter from "./pages/exporter/ManageExporter";
+import HomeRedirect from "./utils/HomeRedirect";
 
 function App() {
   const { status, error, items } = useSelector((state) => state.sidebardata);
@@ -55,8 +56,9 @@ function App() {
       element: <Layout sidebarList={items} pageTitle={`Hello ${role} !`}/>,
       errorElement: <Layout sidebarList={items} childPage={<Error404Page />} />,
       children: [
-        { path: "/", element: <Dashboard /> },
-        { path: "/home", element: <ProtectedRoute element={<Home />} /> },
+        { index: true, element: <HomeRedirect /> }, 
+        { path: "/home", element: <ProtectedRoute element={<Dashboard />} /> },
+        { path: "/dashboard", element: <ProtectedRoute element={<Dashboard />} /> },
         {
           path: "/form/:formName/:id?",
           element: <ProtectedRoute element={<DynamicForm />} />,

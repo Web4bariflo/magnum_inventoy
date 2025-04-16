@@ -105,7 +105,7 @@ const Auth = () => {
       localStorage.setItem("token", response.data.access);
       toast.success("Signup Successfully");
       dispatch(login());
-      navigate("/home");
+      navigate("/dashboard");
     } else {
       toast.error("Signup failed");
     }
@@ -130,7 +130,7 @@ const Auth = () => {
         localStorage.setItem("role", response.data.role); 
         toast.success("Login Successfully");
         dispatch(login());
-        navigate("/home");
+        navigate("/dashboard");
         window.location.reload();
         console.log("response of login: ", response);
       } else {
