@@ -181,6 +181,7 @@ const GraphsDashboard = () => {
             <Typography
               fontSize={16}
               sx={{ fontWeight: "bold"}}
+              color="primary"
             >
               Magnum Stock
             </Typography>
@@ -258,7 +259,8 @@ const GraphsDashboard = () => {
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <Typography
               fontSize={16}
-              sx={{ fontWeight: "bold", color: "#2563EB" }}
+              sx={{ fontWeight: "bold"}}
+              color="primary"
             >
               Stock Exchange
             </Typography>
